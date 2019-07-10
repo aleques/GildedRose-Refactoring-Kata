@@ -312,23 +312,28 @@ public class GildedRoseTest {
 	public void qualityOfConjuredDecreasesTwiceFastAsNormalItem() {
 
 		final String ITEM_NAME = "Conjured Mana Cake";
+		final String NORMAL_ITEM_NAME = "Test";
 
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityOfConjuredDecreasesTwiceFastAsNormalItem();
 		GildedRose app = new GildedRose(items);
 		Item item = getItem(items, ITEM_NAME);
-		Item itemOriginal = getItemClone(item);
+		Item normalItem = getItem(items, NORMAL_ITEM_NAME);
+		int itemQualityBefore;
+		int normalItemQualityBefore;
 		int expected;
-
 
 		// THROUGHOUT THE DAYS
 		for(int day=1; day <= TOTAL_DAYS; day++) {
+			itemQualityBefore = item.quality;
+			// to simulate same values and conditions in the normal way
+			normalItem.sellIn = item.sellIn;
+			normalItem.quality = item.quality;
+			normalItemQualityBefore = item.quality;
 			// WHEN
 			app.updateQuality();
 
-			// twice of double because normal itens already decrease quality by 2. See the method described on the javadoc
-			// of this method
-			expected = itemOriginal.quality - ((day*2)*2);
+			expected = itemQualityBefore - ((normalItemQualityBefore - normalItem.quality) * 2);
 			// THEN
 			assertEquals(getTittle(day, item.name), expected, item.quality);
 		}
@@ -343,10 +348,6 @@ public class GildedRoseTest {
 				.filter(item -> item.name.equalsIgnoreCase(itemName))
 				.findFirst()
 				.get();
-	}
-
-	private Item getItemClone(Item item) {
-		return new Item(item.name, item.sellIn, item.quality);
 	}
 
 }

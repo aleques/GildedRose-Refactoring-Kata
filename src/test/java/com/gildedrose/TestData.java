@@ -18,14 +18,15 @@ public class TestData {
 	public static Item[] getDataForQualityDegredesTwiceFastWhenSellByDateHasPassed() {
 		return new Item[] {
 				new Item("+5 Dexterity Vest", 0, 200),
+				new Item("nuts", 0, 200),
 				// new Item("Aged Brie", 20, 50),
 				new Item("Apple", 0, 1200),
 				new Item("Elixir of the Mongoose", -5, 500),
 				new Item("Banana", -7, 1000),
 				// new Item("Sulfuras, Hand of Ragnaros", -5, 80),
-				new Item("Backstage passes", -10, 490),
+				new Item("Backstage passes", -10, 490) };
 				//new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
-				new Item("Conjured Mana Cake", 0, 600) };
+				//new Item("Conjured Mana Cake", 0, 600) };
 	}
 
 	public static Item[] getDataForQualityIsNeverNegative() {
@@ -160,7 +161,7 @@ public class TestData {
 				new Item("Banana", 7, 10),
 				new Item("Sulfuras, Hand of Ragnaros", 5, 80),
 				new Item("Backstage passes to a TAFKAL80ETC concert", 0, 49),
-				new Item("Backstage passes", 10, 49),
-				new Item("Conjured Mana Cake", 3, 20) };
+				new Item("Test", 5, 20),
+				new Item("Conjured Mana Cake", 5, 20) };
 	}
 }
