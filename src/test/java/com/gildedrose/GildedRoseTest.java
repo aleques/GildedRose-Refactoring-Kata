@@ -43,8 +43,9 @@ public class GildedRoseTest {
 		// GIVEN SOME ITEMS
 		final Item[] ITEMS_ORIGIN = TestData.getDataForQualityDegredesTwiceFastWhenSellByDateHasPassed();
 		Item[] items = TestData.getDataForQualityDegredesTwiceFastWhenSellByDateHasPassed();
-
 		GildedRose app = new GildedRose(items);
+		Item item;
+		int expected;
 
 		// THROUGHOUT THE DAYS
 		for(int day=1; day <= TOTAL_DAYS; day++) {
@@ -53,8 +54,8 @@ public class GildedRoseTest {
 			app.updateQuality();
 
 			for (int i = 0; i < ITEMS_ORIGIN.length; i++) {
-				Item item = items[i];
-				int expected = ITEMS_ORIGIN[i].quality - (day*2);
+				item = items[i];
+				expected = ITEMS_ORIGIN[i].quality - (day*2);
 				// THEN
 				assertEquals(getTittle(day, item.name), expected, items[i].quality);
 			}
@@ -68,6 +69,8 @@ public class GildedRoseTest {
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityIsNeverNegative();
 		GildedRose app = new GildedRose(items);
+		Item item;
+		int expected;
 
 		// THROUGHOUT THE DAYS
 		for(int day=1; day <= TOTAL_DAYS; day++) {
@@ -76,8 +79,8 @@ public class GildedRoseTest {
 			app.updateQuality();
 
 			for (int i = 0; i < items.length; i++) {
-				Item item = items[i];
-				int expected = Math.max(0, items[i].quality);
+				item = items[i];
+				expected = Math.max(0, items[i].quality);
 				// THEN
 				assertEquals(getTittle(day, item.name), expected, items[i].quality);
 			}
@@ -89,9 +92,12 @@ public class GildedRoseTest {
 	public void qualityIsNeverMoreThan50() {
 
 		final int UNIQUE_QUALITY_VALUE = 50;
+
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityIsNeverMoreThan50();
 		GildedRose app = new GildedRose(items);
+		Item item;
+		int expected;
 
 		// THROUGHOUT THE DAYS
 		for(int day=1; day <= TOTAL_DAYS; day++) {
@@ -100,8 +106,8 @@ public class GildedRoseTest {
 			app.updateQuality();
 
 			for (int i = 0; i < items.length; i++) {
-				Item item = items[i];
-				int expected = Math.min(UNIQUE_QUALITY_VALUE, items[i].quality);
+				item = items[i];
+				expected = Math.min(UNIQUE_QUALITY_VALUE, items[i].quality);
 				// THEN
 				assertEquals(getTittle(day, item.name), expected, items[i].quality);
 			}
@@ -112,13 +118,13 @@ public class GildedRoseTest {
 	@Test
 	public void qualityOfAgedBrieIncreasesWhenGetOlder() {
 
-		final String ITEM_PARTIAL_NAME = "Aged Brie";
+		final String ITEM_NAME = "Aged Brie";
 
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityOfAgedBrieIncreasesWhenGetOlder();
 		GildedRose app = new GildedRose(items);
 
-		Item item = getItem(items, ITEM_PARTIAL_NAME);
+		Item item = getItem(items, ITEM_NAME);
 		int qualityBefore;
 		int qualityNow;
 
@@ -131,7 +137,6 @@ public class GildedRoseTest {
 			app.updateQuality();
 
 			qualityNow = item.quality;
-
 			int expected = Math.max(qualityBefore, qualityNow);
 			// THEN
 			assertEquals(getTittle(day, item.name), expected, qualityNow);
@@ -142,13 +147,12 @@ public class GildedRoseTest {
 	@Test
 	public void qualityOfSulfurasNeverDecreases() {
 
-		final String ITEM_PARTIAL_NAME = "Sulfuras, Hand of Ragnaros";
+		final String ITEM_NAME = "Sulfuras, Hand of Ragnaros";
 
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityOfSulfurasNeverDecreases();
 		GildedRose app = new GildedRose(items);
-
-		Item item = getItem(items, ITEM_PARTIAL_NAME);
+		Item item = getItem(items, ITEM_NAME);
 		int qualityBefore;
 		int qualityNow;
 
@@ -161,7 +165,6 @@ public class GildedRoseTest {
 			app.updateQuality();
 
 			qualityNow = item.quality;
-
 			int expected = Math.max(qualityBefore, qualityNow);
 			// THEN
 			assertEquals(getTittle(day, item.name), expected, qualityNow);
@@ -172,15 +175,13 @@ public class GildedRoseTest {
 	@Test
 	public void qualityOfSulfurasIsAlways80() {
 
-		final String ITEM_PARTIAL_NAME = "Sulfuras, Hand of Ragnaros";
+		final String ITEM_NAME = "Sulfuras, Hand of Ragnaros";
 		final int UNIQUE_QUALITY_VALUE = 80;
 		
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityOfSulfurasIsAlways80();
-
 		GildedRose app = new GildedRose(items);
-
-		Item item = getItem(items, ITEM_PARTIAL_NAME);
+		Item item = getItem(items, ITEM_NAME);
 
 		// THROUGHOUT THE DAYS
 		for(int day=1; day <= TOTAL_DAYS; day++) {
@@ -195,13 +196,12 @@ public class GildedRoseTest {
 	@Test
 	public void sellInOfSulfurasNeverDecreases() {
 
-		final String ITEM_PARTIAL_NAME = "Sulfuras, Hand of Ragnaros";
+		final String ITEM_NAME = "Sulfuras, Hand of Ragnaros";
 
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForSellInOfSulfurasNeverDecreases();
 		GildedRose app = new GildedRose(items);
-
-		Item item = getItem(items, ITEM_PARTIAL_NAME);
+		Item item = getItem(items, ITEM_NAME);
 		int sellInBefore;
 		int sellInNow;
 
@@ -212,7 +212,6 @@ public class GildedRoseTest {
 
 			// WHEN
 			app.updateQuality();
-
 			sellInNow = item.sellIn;
 			int expected = Math.max(sellInBefore, sellInNow);
 			// THEN
@@ -224,14 +223,13 @@ public class GildedRoseTest {
 	@Test
 	public void qualityOfBackstagePassesIncreasesBy3WhenThereAre5DaysOrLess() {
 
-		final String ITEM_PARTIAL_NAME = "Backstage passes to a TAFKAL80ETC concert";
+		final String ITEM_NAME = "Backstage passes to a TAFKAL80ETC concert";
 		final int END_DAY = 5;
 
 		// GIVEN SOME ITEMS
 		Item[] itemsOrigin = TestData.getDataForQualityOfBackstagePassesIncreasesBy3WhenThereAre5DaysOrLess();
 		GildedRose app = new GildedRose(itemsOrigin);
-
-		Item item = getItem(itemsOrigin, ITEM_PARTIAL_NAME);
+		Item item = getItem(itemsOrigin, ITEM_NAME);
 		int qualityBefore;
 		int qualityNow;
 
@@ -251,17 +249,21 @@ public class GildedRoseTest {
 	}
 
 	// Quality "Backstage passes" increases by 2 when there are 10 days or less
+
+	/**
+	 * @see #qualityOfBackstagePassesIncreasesBy3WhenThereAre5DaysOrLess
+	 */
 	@Test
 	public void qualityOfBackstagePassesIncreasesBy2WhenThereAre10DaysOrLess() {
 
-		final String ITEM_PARTIAL_NAME = "Backstage passes to a TAFKAL80ETC concert";
-		final int END_DAY = 5;
+		final String ITEM_NAME = "Backstage passes to a TAFKAL80ETC concert";
+		final int END_DAY = 5; // 5 = (10-5) of other test described on javadoc of this method
 
 		// GIVEN SOME ITEMS
 		Item[] itemsOrigin = TestData.getDataForQualityOfBackstagePassesIncreasesBy2WhenThereAre10DaysOrLess();
 		GildedRose app = new GildedRose(itemsOrigin);
 
-		Item item = getItem(itemsOrigin, ITEM_PARTIAL_NAME);
+		Item item = getItem(itemsOrigin, ITEM_NAME);
 		int qualityBefore;
 		int qualityNow;
 
@@ -284,13 +286,12 @@ public class GildedRoseTest {
 	@Test
 	public void qualityOfBackstagePassesDropsToZeroAfterConcert() {
 
-		final String ITEM_PARTIAL_NAME = "Backstage passes to a TAFKAL80ETC concert";
+		final String ITEM_NAME = "Backstage passes to a TAFKAL80ETC concert";
 
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityOfBackstagePassesDropsToZeroAfterConcert();
 		GildedRose app = new GildedRose(items);
-
-		Item item = getItem(items, ITEM_PARTIAL_NAME);
+		Item item = getItem(items, ITEM_NAME);
 
 		// THROUGHOUT THE DAYS
 		for(int day=1; day <= TOTAL_DAYS; day++) {
@@ -303,15 +304,49 @@ public class GildedRoseTest {
 		}
 	}
 
+	// "Conjured" items degrade in Quality twice as fast as normal items
+	/**
+	 * @see #qualityDegredesTwiceFastWhenSellByDateHasPassed
+	 */
+	@Test
+	public void qualityOfConjuredDecreasesTwiceFastAsNormalItem() {
+
+		final String ITEM_NAME = "Conjured Mana Cake";
+
+		// GIVEN SOME ITEMS
+		Item[] items = TestData.getDataForQualityOfConjuredDecreasesTwiceFastAsNormalItem();
+		GildedRose app = new GildedRose(items);
+		Item item = getItem(items, ITEM_NAME);
+		Item itemOriginal = getItemClone(item);
+		int expected;
+
+
+		// THROUGHOUT THE DAYS
+		for(int day=1; day <= TOTAL_DAYS; day++) {
+			// WHEN
+			app.updateQuality();
+
+			// twice of double because normal itens already decrease quality by 2. See the method described on the javadoc
+			// of this method
+			expected = itemOriginal.quality - ((day*2)*2);
+			// THEN
+			assertEquals(getTittle(day, item.name), expected, item.quality);
+		}
+	}
+
 	private String getTittle(int day, String itemName) {
 		return String.valueOf(String.format(TITTLE_FORMAT, day, itemName));
 	}
 
-	private Item getItem(Item[] items, String itemPartialName) {
+	private Item getItem(Item[] items, String itemName) {
 		return Arrays.stream(items)
-				.filter(item -> item.name.toUpperCase().contains(itemPartialName.toUpperCase()))
+				.filter(item -> item.name.equalsIgnoreCase(itemName))
 				.findFirst()
 				.get();
+	}
+
+	private Item getItemClone(Item item) {
+		return new Item(item.name, item.sellIn, item.quality);
 	}
 
 }
