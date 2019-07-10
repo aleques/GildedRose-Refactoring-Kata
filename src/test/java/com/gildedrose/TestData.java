@@ -88,7 +88,7 @@ public class TestData {
 				new Item("Apple", 0, 12),
 				new Item("Elixir of the Mongoose", 5, 7),
 				new Item("Banana", 7, 10),
-				//new Item("Sulfuras, Hand of Ragnaros", 5, 80),
+				new Item("Sulfuras, Hand of Ragnaros", 5, 80),
 				new Item("Sulfuras from hell", 9, 80),
 				new Item("Backstage passes", 10, 49),
 				new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
@@ -134,7 +134,7 @@ public class TestData {
 				new Item("Backstage passes", 10, 49),
 				new Item("Backstage passes blablabla", 9, 15),
 				new Item("Backstage passes ddddd", 6, 17),
-				new Item("Backstage passes to a TAFKAL80ETC concert", 9, 7),
+				new Item("Backstage passes to a TAFKAL80ETC concert", 10, 7),
 				new Item("Conjured Mana Cake", 3, 6) };
 	}
 
@@ -146,7 +146,7 @@ public class TestData {
 				new Item("Elixir of the Mongoose", 5, 7),
 				new Item("Banana", 7, 10),
 				new Item("Sulfuras, Hand of Ragnaros", 5, 80),
-				new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
+				new Item("Backstage passes to a TAFKAL80ETC concert", 0, 49),
 				new Item("Backstage passes", 10, 49),
 				new Item("Conjured Mana Cake", 3, 6) };
 	}
