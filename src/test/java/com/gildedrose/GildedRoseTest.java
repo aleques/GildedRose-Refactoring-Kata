@@ -8,31 +8,21 @@ import org.junit.Test;
 
 public class GildedRoseTest {
 
-	private static final int TOTAL_DAYS = 100;
-	private static final String TITTLE_FORMAT = "DAY %d: %s";
-
 	//All items have a SellIn value which denotes the number of days we have to sell the item
 	@Test
 	public void sellInDegredesByOnePerDay() {
 
 		// GIVEN SOME ITEMS
-		final Item[] ITEMS_ORIGIN = TestData.getDataForSellInDegredesByOnePerDay();
 		Item[] items = TestData.getDataForSellInDegredesByOnePerDay();
-
 		GildedRose app = new GildedRose(items);
 
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
-
+		for (Item item : items) {
+			int sellInBefore = item.sellIn;
 			// WHEN
 			app.updateQuality();
-
-			for (int i = 0; i < ITEMS_ORIGIN.length; i++) {
-				Item item = items[i];
-				// THEN
-				int expected = ITEMS_ORIGIN[i].sellIn - day;
-				assertEquals(getTittle(day, item.name), expected, items[i].sellIn);
-			}
+			// THEN
+			int expected = sellInBefore - 1;
+			assertEquals(item.name, expected, item.sellIn);
 		}
 	}
 
@@ -41,24 +31,16 @@ public class GildedRoseTest {
 	public void qualityDegredesTwiceFastWhenSellByDateHasPassed() {
 
 		// GIVEN SOME ITEMS
-		final Item[] ITEMS_ORIGIN = TestData.getDataForQualityDegredesTwiceFastWhenSellByDateHasPassed();
 		Item[] items = TestData.getDataForQualityDegredesTwiceFastWhenSellByDateHasPassed();
 		GildedRose app = new GildedRose(items);
-		Item item;
-		int expected;
 
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
-
+		for (Item item : items) {
+			int qualityBefore = item.quality;
 			// WHEN
 			app.updateQuality();
-
-			for (int i = 0; i < ITEMS_ORIGIN.length; i++) {
-				item = items[i];
-				expected = ITEMS_ORIGIN[i].quality - (day*2);
-				// THEN
-				assertEquals(getTittle(day, item.name), expected, items[i].quality);
-			}
+			// THEN
+			int expected = qualityBefore - 2;
+			assertEquals(item.name, expected, item.quality);
 		}
 	}
 
@@ -69,21 +51,14 @@ public class GildedRoseTest {
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityIsNeverNegative();
 		GildedRose app = new GildedRose(items);
-		Item item;
-		int expected;
 
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
+		// WHEN
+		app.updateQuality();
 
-			// WHEN
-			app.updateQuality();
-
-			for (int i = 0; i < items.length; i++) {
-				item = items[i];
-				expected = Math.max(0, items[i].quality);
-				// THEN
-				assertEquals(getTittle(day, item.name), expected, items[i].quality);
-			}
+		for (Item item : items) {
+			// THEN
+			int expected = Math.max(0, item.quality);
+			assertEquals(item.name, expected, item.quality);
 		}
 	}
 
@@ -96,21 +71,14 @@ public class GildedRoseTest {
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityIsNeverMoreThan50();
 		GildedRose app = new GildedRose(items);
-		Item item;
-		int expected;
 
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
+		// WHEN
+		app.updateQuality();
 
-			// WHEN
-			app.updateQuality();
-
-			for (int i = 0; i < items.length; i++) {
-				item = items[i];
-				expected = Math.min(UNIQUE_QUALITY_VALUE, items[i].quality);
-				// THEN
-				assertEquals(getTittle(day, item.name), expected, items[i].quality);
-			}
+		for (Item item : items) {
+			// THEN
+			int expected = Math.min(UNIQUE_QUALITY_VALUE, item.quality);
+			assertEquals(item.name, expected, item.quality);
 		}
 	}
 
@@ -118,134 +86,82 @@ public class GildedRoseTest {
 	@Test
 	public void qualityOfAgedBrieIncreasesWhenGetOlder() {
 
-		final String ITEM_NAME = "Aged Brie";
-
-		// GIVEN SOME ITEMS
+		// GIVEN AN AGED BRIE
 		Item[] items = TestData.getDataForQualityOfAgedBrieIncreasesWhenGetOlder();
 		GildedRose app = new GildedRose(items);
+		Item item = items[0];
+		int qualityBefore = item.quality;
 
-		Item item = getItem(items, ITEM_NAME);
-		int qualityBefore;
-		int qualityNow;
-
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
-
-			qualityBefore = item.quality;
-
-			// WHEN
-			app.updateQuality();
-
-			qualityNow = item.quality;
-			int expected = Math.max(qualityBefore, qualityNow);
-			// THEN
-			assertEquals(getTittle(day, item.name), expected, qualityNow);
-		}
+		// WHEN
+		app.updateQuality();
+		// THEN
+		int expected = Math.max(qualityBefore, item.quality);
+		assertEquals(item.name, expected, item.quality);
 	}
 
 	// "Sulfuras", being a legendary item, never decreases in Quality
 	@Test
 	public void qualityOfSulfurasNeverDecreases() {
 
-		final String ITEM_NAME = "Sulfuras, Hand of Ragnaros";
-
-		// GIVEN SOME ITEMS
+		// GIVEN A SULFURA
 		Item[] items = TestData.getDataForQualityOfSulfurasNeverDecreases();
 		GildedRose app = new GildedRose(items);
-		Item item = getItem(items, ITEM_NAME);
-		int qualityBefore;
-		int qualityNow;
+		Item item = items[0];
+		int qualityBefore = item.quality;
 
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
-
-			qualityBefore = item.quality;
-
-			// WHEN
-			app.updateQuality();
-
-			qualityNow = item.quality;
-			int expected = Math.max(qualityBefore, qualityNow);
-			// THEN
-			assertEquals(getTittle(day, item.name), expected, qualityNow);
-		}
+		// WHEN
+		app.updateQuality();
+		// THEN
+		int expected = Math.max(qualityBefore, item.quality);
+		assertEquals(item.name, expected, item.quality);
 	}
 
 	// "Sulfuras" is a legendary item and as such its Quality is 80 and it never alters.
 	@Test
 	public void qualityOfSulfurasIsAlways80() {
 
-		final String ITEM_NAME = "Sulfuras, Hand of Ragnaros";
 		final int UNIQUE_QUALITY_VALUE = 80;
 		
-		// GIVEN SOME ITEMS
+		// GIVEN A SULFURA
 		Item[] items = TestData.getDataForQualityOfSulfurasIsAlways80();
 		GildedRose app = new GildedRose(items);
-		Item item = getItem(items, ITEM_NAME);
-
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
-			// WHEN
-			app.updateQuality();
-			// THEN
-			assertEquals(getTittle(day, item.name), UNIQUE_QUALITY_VALUE, item.quality);
-		}
+		Item item = items[0];
+		// WHEN
+		app.updateQuality();
+		// THEN
+		assertEquals(item.name, UNIQUE_QUALITY_VALUE, item.quality);
 	}
 
 	// "Sulfuras", being a legendary item, never has to be sold
 	@Test
 	public void sellInOfSulfurasNeverDecreases() {
 
-		final String ITEM_NAME = "Sulfuras, Hand of Ragnaros";
-
-		// GIVEN SOME ITEMS
+		// GIVEN A SULFURA
 		Item[] items = TestData.getDataForSellInOfSulfurasNeverDecreases();
 		GildedRose app = new GildedRose(items);
-		Item item = getItem(items, ITEM_NAME);
-		int sellInBefore;
-		int sellInNow;
-
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
-
-			sellInBefore = item.sellIn;
-
-			// WHEN
-			app.updateQuality();
-			sellInNow = item.sellIn;
-			int expected = Math.max(sellInBefore, sellInNow);
-			// THEN
-			assertEquals(getTittle(day, item.name), expected, sellInNow);
-		}
+		Item item = items[0];
+		int sellInBefore = item.sellIn;
+		// WHEN
+		app.updateQuality();
+		// THEN
+		int expected = Math.max(sellInBefore, item.sellIn);
+		assertEquals(item.name, expected, item.sellIn);
 	}
 
 	// Quality of "Backstage passes" increases by 3 when there are 5 days or less
 	@Test
 	public void qualityOfBackstagePassesIncreasesBy3WhenThereAre5DaysOrLess() {
 
-		final String ITEM_NAME = "Backstage passes to a TAFKAL80ETC concert";
-		final int END_DAY = 5;
-
 		// GIVEN SOME ITEMS
-		Item[] itemsOrigin = TestData.getDataForQualityOfBackstagePassesIncreasesBy3WhenThereAre5DaysOrLess();
-		GildedRose app = new GildedRose(itemsOrigin);
-		Item item = getItem(itemsOrigin, ITEM_NAME);
-		int qualityBefore;
-		int qualityNow;
-
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= END_DAY; day++) {
-
-			qualityBefore = item.quality;
-
-			// WHEN
-			app.updateQuality();
-
-			qualityNow = item.quality;
-			int expected = qualityBefore + 3;
-			// THEN
-			assertEquals(getTittle(day, item.name), expected, qualityNow);
-		}
+		Item[] items = TestData.getDataForQualityOfBackstagePassesIncreasesBy3WhenThereAre5DaysOrLess();
+		GildedRose app = new GildedRose(items);
+		Item item = items[0];
+		int qualityBefore = item.quality;
+		// WHEN
+		app.updateQuality();
+		// THEN
+		int expected = qualityBefore + 3;
+		assertEquals(item.name, expected, item.quality);
 	}
 
 	// Quality "Backstage passes" increases by 2 when there are 10 days or less
@@ -256,52 +172,30 @@ public class GildedRoseTest {
 	@Test
 	public void qualityOfBackstagePassesIncreasesBy2WhenThereAre10DaysOrLess() {
 
-		final String ITEM_NAME = "Backstage passes to a TAFKAL80ETC concert";
-		final int END_DAY = 5; // 5 = (10-5) of other test described on javadoc of this method
-
 		// GIVEN SOME ITEMS
-		Item[] itemsOrigin = TestData.getDataForQualityOfBackstagePassesIncreasesBy2WhenThereAre10DaysOrLess();
-		GildedRose app = new GildedRose(itemsOrigin);
-
-		Item item = getItem(itemsOrigin, ITEM_NAME);
-		int qualityBefore;
-		int qualityNow;
-
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= END_DAY; day++) {
-
-			qualityBefore = item.quality;
-
-			// WHEN
-			app.updateQuality();
-
-			qualityNow = item.quality;
-			int expected = qualityBefore + 2;
-			// THEN
-			assertEquals(getTittle(day, item.name), expected, qualityNow);
-		}
+		Item[] items = TestData.getDataForQualityOfBackstagePassesIncreasesBy2WhenThereAre10DaysOrLess();
+		GildedRose app = new GildedRose(items);
+		Item item = items[0];
+		int qualityBefore = item.quality;
+		// WHEN
+		app.updateQuality();
+		// THEN
+		int expected = qualityBefore + 2;
+		assertEquals(item.name, expected, item.quality);
 	}
 
 	// Quality drops to 0 after the concert
 	@Test
 	public void qualityOfBackstagePassesDropsToZeroAfterConcert() {
 
-		final String ITEM_NAME = "Backstage passes to a TAFKAL80ETC concert";
-
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityOfBackstagePassesDropsToZeroAfterConcert();
 		GildedRose app = new GildedRose(items);
-		Item item = getItem(items, ITEM_NAME);
-
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
-
-			// WHEN
-			app.updateQuality();
-
-			// THEN
-			assertEquals(getTittle(day, item.name), 0, item.quality);
-		}
+		Item item = items[0];
+		// WHEN
+		app.updateQuality();
+		// THEN
+		assertEquals(item.name, 0, item.quality);
 	}
 
 	// "Conjured" items degrade in Quality twice as fast as normal items
@@ -311,37 +205,21 @@ public class GildedRoseTest {
 	@Test
 	public void qualityOfConjuredDecreasesTwiceFastAsNormalItem() {
 
-		final String ITEM_NAME = "Conjured Mana Cake";
-		final String NORMAL_ITEM_NAME = "Test";
-
 		// GIVEN SOME ITEMS
 		Item[] items = TestData.getDataForQualityOfConjuredDecreasesTwiceFastAsNormalItem();
 		GildedRose app = new GildedRose(items);
-		Item item = getItem(items, ITEM_NAME);
-		Item normalItem = getItem(items, NORMAL_ITEM_NAME);
-		int itemQualityBefore;
-		int normalItemQualityBefore;
-		int expected;
+		Item normalItem = items[0];
+		Item item = items[1];
 
-		// THROUGHOUT THE DAYS
-		for(int day=1; day <= TOTAL_DAYS; day++) {
-			itemQualityBefore = item.quality;
-			// to simulate same values and conditions in the normal way
-			normalItem.sellIn = item.sellIn;
-			normalItem.quality = item.quality;
-			normalItemQualityBefore = item.quality;
-			// WHEN
-			app.updateQuality();
-
-			expected = itemQualityBefore - ((normalItemQualityBefore - normalItem.quality) * 2);
-			// THEN
-			assertEquals(getTittle(day, item.name), expected, item.quality);
-		}
+		int itemQualityBefore = item.quality;
+		int normalItemQualityBefore = normalItem.quality; // to simulate same values and conditions in the normal way
+		// WHEN
+		app.updateQuality();
+		// THEN
+		int expected = itemQualityBefore - ((normalItemQualityBefore - normalItem.quality) * 2);
+		assertEquals(item.name, expected, item.quality);
 	}
 
-	private String getTittle(int day, String itemName) {
-		return String.valueOf(String.format(TITTLE_FORMAT, day, itemName));
-	}
 
 	private Item getItem(Item[] items, String itemName) {
 		return Arrays.stream(items)

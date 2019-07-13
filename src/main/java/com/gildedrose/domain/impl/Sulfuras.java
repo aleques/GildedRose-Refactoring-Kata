@@ -19,7 +19,7 @@ public class Sulfuras extends ItemAdapter {
 	}
 
 	@Override
-	public void update() {
+	public void updateQuality() {
 		// nothing
 	}
 

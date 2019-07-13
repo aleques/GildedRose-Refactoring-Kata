@@ -32,7 +32,7 @@ public abstract class ItemAdapter {
 
 	// ===================================
 
-	public void update() {
+	public void updateQuality() {
 
 		updateQualityBeforeSellInDecrease();
 		decreaseSellIn();
