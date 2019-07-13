@@ -8,9 +8,6 @@ public class TestData {
 				new Item("Aged Brie", 20, 50),
 				new Item("Apple", 0, 12),
 				new Item("Elixir of the Mongoose", 5, 7),
-				new Item("Banana", 7, 10),
-				// new Item("Sulfuras, Hand of Ragnaros", 5, 80),
-				new Item("Backstage passes", 10, 49),
 				new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
 				new Item("Conjured Mana Cake", 3, 6) };
 	}
