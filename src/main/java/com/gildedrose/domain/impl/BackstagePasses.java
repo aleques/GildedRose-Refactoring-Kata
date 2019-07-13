@@ -1,23 +1,22 @@
 package com.gildedrose.domain.impl;
 
 import com.gildedrose.Item;
-import com.gildedrose.domain.ItemAdapter;
 import com.gildedrose.domain.ItemType;
 
-public class BackstagePasses extends ItemAdapter {
+public class BackstagePasses extends CommonItem {
 
 	public BackstagePasses(Item item) {
-		super(item, ItemType.BACKSTAGE_PASSES);
+		super(item);
 	}
 
 	@Override
 	public void updateQualityBeforeSellInDecrease() {
-		if (getQuality() < GENERAL_MAX_QUALITY) {
+		if (getQuality() < getMaxQuality()) {
 			increaseQuality();
-			if (getSellIn() < 11 && getQuality() < GENERAL_MAX_QUALITY) {
+			if (getSellIn() < 11 && getQuality() < getMaxQuality()) {
 				increaseQuality();
 			}
-			if (getSellIn() < 6 && getQuality() < GENERAL_MAX_QUALITY) {
+			if (getSellIn() < 6 && getQuality() < getMaxQuality()) {
 				increaseQuality();
 			}
 		}
@@ -28,5 +27,10 @@ public class BackstagePasses extends ItemAdapter {
 		if (getSellIn() < 0) {
 			setQuality(0);
 		}
+	}
+
+	@Override
+	public ItemType getType() {
+		return ItemType.BACKSTAGE_PASSES;
 	}
 }

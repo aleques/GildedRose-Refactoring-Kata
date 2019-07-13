@@ -1,13 +1,14 @@
 package com.gildedrose.items;
 
-import static com.gildedrose.domain.ItemType.COMMON_ITEM;
 import static com.gildedrose.domain.ItemType.CONJURED;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
 import com.gildedrose.GildedRose;
 import com.gildedrose.Item;
+import com.gildedrose.domain.ItemAdapter;
 
 public class ConjuredTest {
 
@@ -20,44 +21,86 @@ public class ConjuredTest {
 	//All items have a SellIn value which denotes the number of days we have to sell the item
 	@Test
 	public void sellInDegredesByOnePerDay() {
-		commonItemTest.sellInDegredesByOnePerDay(new Item(CONJURED.getName(), 10,20));
+		commonItemTest.sellInDegredesByOnePerDay(new Item(CONJURED.getName(), 1,20));
+		// EDGE CASE - When someone copy-paste quality rules in the place of SellIn rules
+		commonItemTest.sellInDegredesByOnePerDay(new Item(CONJURED.getName(), -1,20));
+	}
+
+	// Once the sell by date has passed, Quality degrades twice as fast
+	@Test
+	public void qualityDegredesTwiceFastWhenSellByDateHasPassed() {
+		qualityDegredesTwiceFastWhenSellByDateHasPassed(new Item(CONJURED.getName(), -5,20));
+		// EDGE CASE - SellInIsZeroAndQualityIsPositive
+		qualityDegredesTwiceFastWhenSellByDateHasPassed(new Item(CONJURED.getName(), 0,20));
 	}
 
 	// The Quality of an item is never negative
 	@Test
 	public void qualityIsNeverNegative() {
 		commonItemTest.qualityIsNeverNegative(new Item(CONJURED.getName(), 10,0));
+		// EDGE CASE - SellInZero
+		commonItemTest.qualityIsNeverNegative(new Item(CONJURED.getName(), 0,0));
+		// EDGE CASE - SellInNegative
+		commonItemTest.qualityIsNeverNegative(new Item(CONJURED.getName(), -1,0));
 	}
 
-	// The Quality of an item is never more than 50
 	@Test
-	public void qualityIsNeverMoreThan50() {
-		commonItemTest.qualityIsNeverMoreThan50(new Item(CONJURED.getName(), 10, CommonItemTest.MAX_QUALITY_VALUE));
+	public void qualityIsNeverNegativeEvenWhenQualityDegradesTwiceFast() {
+		// EDGE CASE - SellInIsZeroAndQualityIsZero
+		commonItemTest.qualityIsNeverNegative(new Item(CONJURED.getName(), 0,0));
+		// EDGE CASE - SellInIsZeroAndQualityIsOne
+		commonItemTest.qualityIsNeverNegative(new Item(CONJURED.getName(), 0,1));
+		// EDGE CASE - SellInIsZeroAndQualityIsTwo
+		commonItemTest.qualityIsNeverNegative(new Item(CONJURED.getName(), 0,2));
+		// EDGE CASE - SellInIsZeroAndQualityIsThree
+		commonItemTest.qualityIsNeverNegative(new Item(CONJURED.getName(), 0,3));
+		// EDGE CASE - SellInIsZeroOrLessAndQualityIsTwo
+		commonItemTest.qualityIsNeverNegative(new Item(CONJURED.getName(), -2,2));
+		// EDGE CASE - SellInIsZeroOrLessAndQualityIsThree
+		commonItemTest.qualityIsNeverNegative(new Item(CONJURED.getName(), -5,3));
+
 	}
 
+	// ============================= OTHER CASES =============================================
 
-	// ===================================================================
-
-
-	// "Conjured" items degrade in Quality twice as fast as normal items
-	// override basic behavior of
-	//    qualityDegredesTwiceFastWhenSellByDateHasPassed
 	@Test
-	public void qualityOfConjuredDegradesTwiceFastAsNormalItem() {
+	public void qualityDegredesByTwoPerDay() {
+		qualityDegredesByTwoPerDay(new Item(CONJURED.getName(), 2,20));
+	}
 
-		// GIVEN SOME ITEMS
-		Item conjured = new Item(CONJURED.getName(), 10,20);
-		Item common = new Item(COMMON_ITEM.getName(), 10,20);
-		GildedRose app = new GildedRose(new Item[]{conjured});
+	// =======================================================================================
 
-		int itemQualityBefore = conjured.quality;
-		int commonItemQualityBefore = common.quality; // to simulate same values and conditions in the normal way
+
+	public void qualityDegredesTwiceFastWhenSellByDateHasPassed(Item item) {
+
+		// GIVEN
+		GildedRose app = new GildedRose(new Item[]{item});
+		int qualityBefore = item.quality;
+
 		// WHEN
 		app.updateQuality();
+
 		// THEN
-		int commonItemDegrade = commonItemQualityBefore - common.quality;
-		int expected = itemQualityBefore - (commonItemDegrade * 2);
-		assertEquals(conjured.name, expected, conjured.quality);
+		int expected = qualityBefore - 4;
+		assertEquals(item.name, expected, item.quality);
 	}
+
+	public void qualityDegredesByTwoPerDay(Item item) {
+
+		// GIVEN
+		GildedRose app = new GildedRose(new Item[]{item});
+		int qualityBefore = item.quality;
+
+		// WHEN
+		app.updateQuality();
+
+		// THEN
+		int expected = qualityBefore - 2;
+		assertEquals(item.name, expected, item.quality);
+	}
+
+	// =============================================================
+
+
 
 }

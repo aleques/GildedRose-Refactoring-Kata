@@ -3,17 +3,25 @@ package com.gildedrose.domain.impl;
 import com.gildedrose.Item;
 import com.gildedrose.domain.ItemType;
 
-public class Conjured extends ItemBase {
+public class Conjured extends CommonItem {
 
 	public Conjured(Item item) {
-		super(item, ItemType.CONJURED);
+		super(item);
 	}
 
 	@Override
 	public void update() {
 		int qualityBefore = getQuality();
-		super.update(); // general behavior
-		int qualityIncreaseAmount = qualityBefore - getQuality();
-		sumToQuality(qualityIncreaseAmount); // twice general behavior
+		super.update(); // default common item behavior
+		int qualityDiff = qualityBefore - getQuality();
+
+		// twice general behavior
+		int qualityFinal = getQuality() - Math.abs(qualityDiff);// twice general behavior
+		setQuality(qualityFinal < 0 ? 0 : qualityFinal); // quality never negative
+	}
+
+	@Override
+	public ItemType getType() {
+		return ItemType.CONJURED;
 	}
 }

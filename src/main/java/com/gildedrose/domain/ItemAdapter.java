@@ -6,19 +6,13 @@ import com.gildedrose.Item;
 
 public abstract class ItemAdapter {
 
-	public static final int GENERAL_MAX_QUALITY = 50;
+	public static final int MAX_QUALITY = 50;
 
 	protected Item item;
-	protected ItemType itemType;
 
 	public ItemAdapter(Item item) {
 		this.item = item;
-		this.itemType = ItemType.get(item.name);
-	}
-
-	public ItemAdapter(Item item, ItemType itemType) {
-		this.item = item;
-		this.itemType = itemType;
+		validateItemName(item.name);
 	}
 
 	public ItemAdapter(String name, int sellIn, int quality) {
@@ -29,6 +23,7 @@ public abstract class ItemAdapter {
 
 	public abstract void updateQualityBeforeSellInDecrease();
 	public abstract void updateQualityAfterSellInDecrease();
+	public abstract ItemType getType();
 
 	// ===================================
 
@@ -39,6 +34,10 @@ public abstract class ItemAdapter {
 		updateQualityAfterSellInDecrease();
 	}
 	// ===================================
+
+	public int getMaxQuality() {
+		return MAX_QUALITY;
+	}
 
 	protected int decreaseSellIn() {
 		return --item.sellIn;
@@ -92,5 +91,13 @@ public abstract class ItemAdapter {
 	@Override
 	public int hashCode() {
 		return Objects.hash(item.name);
+	}
+
+	// ===================================
+
+	private void validateItemName(String name) {
+		if (getType() != ItemType.COMMON_ITEM && !getType().getName().equals(name)) {
+			throw new IllegalArgumentException("Invalid name for this item adapter - " + getType().getName());
+		}
 	}
 }

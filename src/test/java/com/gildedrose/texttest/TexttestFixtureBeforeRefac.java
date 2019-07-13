@@ -11,7 +11,7 @@ import com.gildedrose.TexttestFixture;
 
 public class TexttestFixtureBeforeRefac {
 
-    public static final String FILENAME_FORMAT = "src/test/resources/texttest-originalll/testfiledays%d.txt";
+    public static final String FILENAME_FORMAT = "src/test/resources/texttest-original/testfiledays%d.txt";
 
     @Ignore
     @Test

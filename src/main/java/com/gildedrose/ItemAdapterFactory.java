@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import com.gildedrose.domain.impl.AgedBrie;
 import com.gildedrose.domain.impl.BackstagePasses;
-import com.gildedrose.domain.impl.ItemBase;
+import com.gildedrose.domain.impl.CommonItem;
 import com.gildedrose.domain.impl.Conjured;
 import com.gildedrose.domain.ItemAdapter;
 import com.gildedrose.domain.ItemType;
@@ -20,7 +20,7 @@ public class ItemAdapterFactory {
 				.collect(Collectors.toList());
 	}
 
-	private static ItemAdapter getInstance(Item item) {
+	public static ItemAdapter getInstance(Item item) {
 
 		ItemType itemType = ItemType.get(item.name);
 
@@ -34,7 +34,7 @@ public class ItemAdapterFactory {
 		case CONJURED:
 			return new Conjured(item);
 		default:
-			return new ItemBase(item);
+			return new CommonItem(item);
 		}
 	}
 }

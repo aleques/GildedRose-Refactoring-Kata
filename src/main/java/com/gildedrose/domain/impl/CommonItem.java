@@ -4,28 +4,33 @@ import com.gildedrose.Item;
 import com.gildedrose.domain.ItemAdapter;
 import com.gildedrose.domain.ItemType;
 
-public class ItemBase extends ItemAdapter {
+public class CommonItem extends ItemAdapter {
 
-	public ItemBase(Item item, ItemType itemType) {
-		super(item, itemType);
+	public CommonItem(Item item) {
+		super(item);
 	}
 
 	@Override
 	public void updateQualityBeforeSellInDecrease() {
-		if (getQuality() > 0) {
+		if (isQualityNonNegative()) {
 			decreaseQuality();
 		}
 	}
 
 	@Override
 	public void updateQualityAfterSellInDecrease() {
-		if (getSellIn() < 0 && getQuality() > 0) {
+		if (getSellIn() < 0 && isQualityNonNegative()) {
 			decreaseQuality();
 		}
 	}
 
-	public ItemBase(Item item) {
-		this(item, ItemType.COMMON_ITEM);
+	@Override
+	public ItemType getType() {
+		return ItemType.COMMON_ITEM;
+	}
+
+	private boolean isQualityNonNegative() {
+		return getQuality() > 0;
 	}
 
 }
