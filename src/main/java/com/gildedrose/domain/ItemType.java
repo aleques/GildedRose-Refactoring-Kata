@@ -8,22 +8,22 @@ public enum ItemType {
 	CONJURED("Conjured Mana Cake"),
 	COMMON_ITEM("Common item");
 
-	private String fullName;
+	private String name;
 
-	ItemType(String fullName) {
-		this.fullName = fullName;
+	ItemType(String name) {
+		this.name = name;
 	}
 
 	public static ItemType get(String fullName) {
 		for (ItemType itemType : values()) {
-			if (itemType.fullName.equals(fullName)) {
+			if (itemType.name.equals(fullName)) {
 				return itemType;
 			}
 		}
 		return COMMON_ITEM;
 	}
 
-	public String getFullName() {
-		return fullName;
+	public String getName() {
+		return name;
 	}
 }

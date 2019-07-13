@@ -10,10 +10,10 @@ public class Conjured extends ItemBase {
 	}
 
 	@Override
-	public void updateQuality() {
+	public void update() {
 		int qualityBefore = getQuality();
-		super.updateQuality(); // general behavior
-		int qualityIncreaseAmount = getQuality() - qualityBefore;
+		super.update(); // general behavior
+		int qualityIncreaseAmount = qualityBefore - getQuality();
 		sumToQuality(qualityIncreaseAmount); // twice general behavior
 	}
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.gildedrose.domain.ItemAdapter;
 
-class GildedRose {
+public class GildedRose {
 
     private List<ItemAdapter> items;
 
@@ -13,7 +13,7 @@ class GildedRose {
     }
 
     public void updateQuality() {
-        this.items.stream().forEach(item -> item.updateQuality());
+        this.items.stream().forEach(item -> item.update());
     }
 
 }
